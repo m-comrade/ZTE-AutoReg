@@ -37,7 +37,7 @@ class ZTE:
                     onu_num=i
                     break                   
         return(interface)
-        #nahooya?
+        #test string
     print(gpon_onu_info) 
     #reg commandlets  
     def gpon_onu_reg (self):

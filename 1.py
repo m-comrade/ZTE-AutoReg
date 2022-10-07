@@ -12,7 +12,7 @@ class ZTE:
         telnet.write_until(b'show gpon onu state')
         telnet.write(b'show gpon onu uncfg')
         
-        def interface(interface_index):
+        def interface(self):
             interface=telnet.expect([b'[ZTE]'])
             interface=interface.split(' ')   
             interface_index_start = find(interface,'gpon-onu_1/')
@@ -32,11 +32,11 @@ class ZTE:
                 if i != onu_num:
                     onu_num=i
                     break                   
-        return(onu_num,sn_onu)
+        return(interface)
     print(gpon_onu_info)   
     def gpon_onu_reg (self):
         telnet.write(b'conf t')
-        telnet.write(b'int gpon-olt_1/2'+ip.stuff.interface)
+        telnet.write(b'int gpon-olt_1/2'+ZTE.gpon_onu_info)
         telnet.write(b'onu'+ ZTE.gpon_onu_info.onu_num +'type ZTE660 sn ZTE'+ZTE.gpon_onu_info.sn_onu )
         telnet.write(b'onu'+ ZTE.gpon_onu_info.onu_num + 'profile line 1000mb remote bridge110' )
         telnet.write(b'exit')

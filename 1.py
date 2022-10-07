@@ -10,15 +10,18 @@ class ZTE:
         telnet.write_until(b'show gpon onu state')
         telnet.write(b'show gpon onu uncfg')
         sn_onu=telnet.read_until(b'gpon')
-        onu_num=telnet.read_very_eager().decode('utf-8')
-        onu_num=onu_num.format(i)
-        while onu_num<129:
-            onu_num=onu_num[::1]
-            i=0
-            i=+1
-            if i != onu_num:
-                onu_num=i
-                break                   
+        if telnet.read_until(b'No related information to show'):
+            print('все онушки регнуты')
+        else:
+            onu_num=telnet.read_very_eager().decode('utf-8')
+            onu_num=onu_num.format(i)
+            while onu_num<129:
+                onu_num=onu_num[::1]
+                i=0
+                i=+1
+                if i != onu_num:
+                    onu_num=i
+                    break                   
         
         return(onu_num,sn_onu)
     print(gpon_onu_info)   

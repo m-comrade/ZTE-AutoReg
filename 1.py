@@ -3,26 +3,25 @@ import ip
 telnet=tl.Telnet('')
 class ZTE:
     def connect(self):
-        telnet(ip.stuff.ip)
+        tn=telnet(ip.stuff.ip)
         telnet.write_until(ip.stuff.user)
-        return(self)
-    def gpon_onu_info(self):
+        return(tn)
+    def gpon_onu_info(onu_num,sn_onu):
         telnet.write_until(b'show gpon onu state')
-        
+        telnet.write(b'show gpon onu uncfg')
+        sn_onu=telnet.read_until(b'gpon')
         onu_num=telnet.read_very_eager().decode('utf-8')
         onu_num=onu_num.format(i)
-        while onu_num<65:
+        while onu_num<129:
             onu_num=onu_num[::1]
             i=0
             i=+1
             if i != onu_num:
                 onu_num=i
-                break        
-        telnet.write(b'show gpon onu uncfg')        
-        sn_onu=telnet.read_until(b'sn')
-        onu_num=onu_num
+                break                   
         
-        
+        return(onu_num,sn_onu)
+    print(gpon_onu_info)   
     def gpon_onu_reg (self):
         telnet.write(b'conf t')
         telnet.write(b'int gpon-olt_1/2'+ip.stuff.interface)
@@ -30,7 +29,7 @@ class ZTE:
         telnet.write(b'onu'+ ZTE.gpon_onu_info.onu_num + 'profile line 1000mb remote bridge110' )
         telnet.write(b'exit')
         telnet.write(b'interface gpon-onu_1/2'+ip.stuff.interface+':'+ZTE.gpon_onu_info.onu_num)
-        telnet.write(b'service-port 1 vport 1 user-vlan 110 vlan 110')
+        telnet.write(b'service-port 1 vport 1 user-vlan'+ip.vlan_id+'vlan' + ip.vlan_id )
         telnet.write(b'description'+ip.stuff.description)
         telnet.write(b'ip access-group 300 in vport 1')
         

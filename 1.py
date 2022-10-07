@@ -6,7 +6,7 @@ class ZTE:
         tn=telnet(ip.stuff.ip)
         telnet.write_until(ip.stuff.user)
         return(tn)
-    def gpon_onu_info(onu_num,sn_onu):
+    def gpon_onu_info(self):
         telnet.write_until(b'show gpon onu state')
         telnet.write(b'show gpon onu uncfg')
         sn_onu=telnet.read_until(b'gpon')
@@ -22,7 +22,6 @@ class ZTE:
                 if i != onu_num:
                     onu_num=i
                     break                   
-        
         return(onu_num,sn_onu)
     print(gpon_onu_info)   
     def gpon_onu_reg (self):

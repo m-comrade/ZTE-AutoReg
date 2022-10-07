@@ -1,4 +1,6 @@
+from gettext import find
 import telnetlib as tl
+from tracemalloc import start
 import ip
 telnet=tl.Telnet('')
 class ZTE:
@@ -9,6 +11,14 @@ class ZTE:
     def gpon_onu_info(self):
         telnet.write_until(b'show gpon onu state')
         telnet.write(b'show gpon onu uncfg')
+        
+        def interface(interface_index):
+            interface=telnet.expect([b'[ZTE]'])
+            interface=interface.split(' ')   
+            interface_index_start = find(interface,'gpon-onu_1/')
+            interface_index_end=find (interface,'ZTE')
+            interface_index=interface.index(interface_index_start,interface_index_end)
+            return interface_index
         sn_onu=telnet.read_until(b'gpon')
         if telnet.read_until(b'No related information to show'):
             print('все онушки регнуты')
@@ -18,7 +28,7 @@ class ZTE:
             while onu_num<129:
                 onu_num=onu_num[::1]
                 i=0
-                i=+1
+                i=+1 
                 if i != onu_num:
                     onu_num=i
                     break                   
@@ -31,7 +41,7 @@ class ZTE:
         telnet.write(b'onu'+ ZTE.gpon_onu_info.onu_num + 'profile line 1000mb remote bridge110' )
         telnet.write(b'exit')
         telnet.write(b'interface gpon-onu_1/2'+ip.stuff.interface+':'+ZTE.gpon_onu_info.onu_num)
-        telnet.write(b'service-port 1 vport 1 user-vlan'+ip.vlan_id+'vlan' + ip.vlan_id )
+        telnet.write(b'service-port 1 vport 1 user-vlan'+ip.vlan_id +'vlan' + ip.vlan_id )
         telnet.write(b'description'+ip.stuff.description)
         telnet.write(b'ip access-group 300 in vport 1')
         

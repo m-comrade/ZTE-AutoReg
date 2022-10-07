@@ -1,17 +1,19 @@
 from gettext import find
 import telnetlib as tl
-from tracemalloc import start
 import ip
+#global argument
 telnet=tl.Telnet('')
 class ZTE:
+#define of connection to switch
     def connect(self):
         tn=telnet(ip.stuff.ip)
         telnet.write_until(ip.stuff.user)
         return(tn)
+        #define of reading information from commandlets 
     def gpon_onu_info(self):
         telnet.write_until(b'show gpon onu state')
         telnet.write(b'show gpon onu uncfg')
-        
+        #pars interface
         def interface(self):
             interface=telnet.expect([b'[ZTE]'])
             interface=interface.split(' ')   
@@ -20,11 +22,13 @@ class ZTE:
             interface_index=interface.index(interface_index_start,interface_index_end)
             return interface_index
         sn_onu=telnet.read_until(b'gpon')
+        #check  onu registration 
         if telnet.read_until(b'No related information to show'):
             print('все онушки регнуты')
         else:
             onu_num=telnet.read_very_eager().decode('utf-8')
             onu_num=onu_num.format(i)
+            #find of non reg number of onu
             while onu_num<129:
                 onu_num=onu_num[::1]
                 i=0
@@ -33,7 +37,9 @@ class ZTE:
                     onu_num=i
                     break                   
         return(interface)
-    print(gpon_onu_info)   
+        #nahooya?
+    print(gpon_onu_info) 
+    #reg commandlets  
     def gpon_onu_reg (self):
         telnet.write(b'conf t')
         telnet.write(b'int gpon-olt_1/2'+ZTE.gpon_onu_info)

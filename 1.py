@@ -1,3 +1,4 @@
+from asyncore import write
 from gettext import find
 import telnetlib as tl
 import ip
@@ -44,8 +45,6 @@ class ZTE:
                 onu_num=i
                 break
             return onu_num   
-        #test string
-    print(gpon_onu_info) 
     #reg commandlets  
     def gpon_onu_reg (self):
         telnet.write(b'conf t')
@@ -57,4 +56,17 @@ class ZTE:
         telnet.write(b'service-port 1 vport 1 user-vlan'+ip.vlan_id +'vlan' + ip.vlan_id )
         telnet.write(b'description'+ip.stuff.description)
         telnet.write(b'ip access-group 300 in vport 1')
+class ZTE_epon:
+    def epon_onu_unauth_interface (self):
+        ZTE.connect
+        telnet.write(b'whow onu una')
+        interface=telnet.read_until(b'Onu Model')
+        interface_index_start=find(interface,b'epon-onu_1/1/')
+        interface_index_end=find(interface,b'\n')
+        interface_index=interface.index(interface_index_start,interface_index_end)
+        interface=interface[interface_index]
+        return interface
         
+        
+
+            

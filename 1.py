@@ -66,7 +66,18 @@ class ZTE_epon:
         interface_index=interface.index(interface_index_start,interface_index_end)
         interface=interface[interface_index]
         return interface
-        
-        
-
-            
+    def  epon_onu_state(self):
+        #переписать хуйню сверху и эту в отдельную функцию из предидущего класса
+        telnet.write(b'')
+    def epon_onu_reg(self):
+        telnet.write(b'conf t')
+        telnet.write(b'int ' + ZTE_epon.epon_onu_unauth_interface)
+        telnet.write(b'onu ' + None)# + та хуйня сверху ,которую надо переписать)    
+        telnet.write(b'!')
+        telnet.write(b'int ' +ZTE_epon.epon_onu_unauth_interface + 'та хуйня')
+        telnet.write(b'admin enable \n sla-profile 1000mbit vport 1')
+        telnet.write(b'encrypt direction downstream disable vport 1')
+        telnet.write(b'switchport vlan '+ ip.stuff.vlan_id + b' tag vport 1')
+        telnet.write(b'ip access-group 300 in vport 1')
+        telnet.write(b'Property description '+ ip.stuff.description)
+        telnet.write(b'!')    

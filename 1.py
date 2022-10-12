@@ -91,4 +91,4 @@ class ZTE_epon:
         telnet.write(b'interface-loopdetect eth_0/1 activate')
         telnet.write(b'interface-loopdetect eth_0/2 activate')
         telnet.write(b'interface-loopdetect eth_0/3 activate')
-        telnet.write(b'interface-loopdetect eth_0/4 activate')   
+        telnet.write(b'interface-loopdetect eth_0/4 activate')  
